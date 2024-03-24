@@ -17,8 +17,12 @@ function ThemeSwitcher() {
         })
       }}
     >
-      {theme === "light" && <i className='bx bx-moon text-4xl text-white'></i>}
-      {theme === "dark" && <i className='bx bx-sun text-4xl text-white'></i>}
+      {theme === "light" && (
+        <i className='bx bx-moon text-4xl text-yellow-400 dark:text-white'></i>
+      )}
+      {theme === "dark" && (
+        <i className='bx bx-sun text-4xl  text-yellow-400'></i>
+      )}
     </button>
   )
 }

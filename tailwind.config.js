@@ -6,8 +6,13 @@ export default {
       colors: {
         primary: "#0081a7",
         "primary-dark": "#184e77",
-        light: '#fdfcdc'
+        light: "#fdfcdc",
+        "dark-black": "#0e0e0f",
+        "dark-grey": "#212427",
       },
+      animation: {
+        'spin-slow': 'spin .5s linear'
+      }
     },
   },
   plugins: [],
