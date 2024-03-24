@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-export async function useFetch(fetchingFn, initialValue) {
+export function useFetch(fetchingFn, initialValue) {
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState(initialValue)
   const [error, setError] = useState("")
