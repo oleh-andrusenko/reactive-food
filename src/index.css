@@ -6,3 +6,8 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+input:focus{
+  inset: 0;
+  outline: none;
+}
