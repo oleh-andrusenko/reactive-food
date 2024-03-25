@@ -3,7 +3,7 @@ import logo from "../assets/logo.png"
 import ThemeSwitcher from "./ThemeSwitcher"
 import Cart from "./Cart"
 
-function Header({ cart }) {
+function Header({ cart, onNotify }) {
   return (
     <div className='h-24 bg-white shadow-lg rounded-b-lg flex items-center justify-between px-8 py-2 dark:bg-dark-grey sticky top-0'>
       <div className='flex items-center gap-2'>

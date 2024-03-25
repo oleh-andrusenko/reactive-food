@@ -3,9 +3,9 @@ import { createPortal } from "react-dom"
 import { CartContext } from "../context/cart-context"
 import { useForm } from "react-hook-form"
 import { putOrder } from "../actions/fetchData"
-
+import { toast } from "react-toastify"
 function Checkout({ onBack, onClose }) {
-  const { items, clearCart } = useContext(CartContext)
+  const { items, clearCart, showNotification } = useContext(CartContext)
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -25,6 +25,8 @@ function Checkout({ onBack, onClose }) {
     console.log("submitted")
     console.log(JSON.stringify(data))
     const response = await putOrder({ customer: data, items: items })
+
+    showNotification(response.status)
     reset()
     clearCart()
     onClose()

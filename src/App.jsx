@@ -1,19 +1,20 @@
-import { useState } from "react"
 import Header from "./components/Header"
 import Products from "./components/Products"
 import CartContextProvider from "./context/cart-context"
+import { ToastContainer} from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 function App() {
-  const [cart, setCart] = useState([])
 
-  function handleAddToCart(item) {
-    setCart((prevCart) => [...prevCart, item])
-  }
 
   return (
-    <CartContextProvider>
-      <Header cart={cart} />
-      <Products onAddToCart={handleAddToCart} />
-    </CartContextProvider>
+    <>
+      <CartContextProvider>
+        <Header />
+        <Products />
+
+        <ToastContainer />
+      </CartContextProvider>
+    </>
   )
 }
 

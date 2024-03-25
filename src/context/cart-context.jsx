@@ -1,12 +1,14 @@
 import { createContext, useState } from "react"
 import { fetchMeals } from "../actions/fetchData"
 import { useFetch } from "../hooks/useFetch"
+import { toast } from "react-toastify"
 
 export const CartContext = createContext({
   items: [],
   addItemToCart: () => {},
   updateItemQuantity: () => {},
   clearCart: () => {},
+  showNotification: () => {},
 })
 
 export default function CartContextProvider({ children }) {
@@ -81,11 +83,24 @@ export default function CartContextProvider({ children }) {
     setCart({ items: [] })
   }
 
+  function handleNotification(type) {
+    switch (true) {
+      case type === 201: {
+        toast.success("Order confirmed!", {autoClose: 1500})
+        break
+      }
+      default: {
+        toast.error("Something went wrong!")
+      }
+    }
+  }
+
   const ctxValue = {
     items: cart.items,
     addItemToCart: handleAddItemToCart,
     updateItemQuantity: handleUpdateCartItemQuantity,
     clearCart: handleClearCart,
+    showNotification: handleNotification,
   }
 
   return (
