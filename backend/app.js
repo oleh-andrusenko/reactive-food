@@ -21,8 +21,8 @@ app.get("/meals", async (req, res) => {
 })
 
 app.post("/orders", async (req, res) => {
-  const orderData = req.body.order
-
+  const orderData = req.body
+  console.log(orderData)
   if (
     orderData === null ||
     orderData.items === null ||

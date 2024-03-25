@@ -2,7 +2,7 @@ import { createPortal } from "react-dom"
 import { useContext, useState } from "react"
 import { CartContext } from "../context/cart-context"
 import Checkout from "./Checkout"
-
+import { useForm } from "react-hook-form"
 function CartModal({ open, onClose }) {
   const { items, updateItemQuantity } = useContext(CartContext)
   const [checkout, setCheckout] = useState(false)
@@ -11,6 +11,7 @@ function CartModal({ open, onClose }) {
     0
   )
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0)
+
   if (!open) return null
   return createPortal(
     <>
@@ -96,7 +97,8 @@ function CartModal({ open, onClose }) {
 
       {checkout && (
         <Checkout
-          onBack={() => {
+          onBack={() => setCheckout(false)}
+          onClose={() => {
             setCheckout(false)
             onClose()
           }}
