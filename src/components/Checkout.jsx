@@ -1,17 +1,35 @@
 import { useContext } from "react"
 import { createPortal } from "react-dom"
 import { CartContext } from "../context/cart-context"
-function Checkout({ onBack }) {
-  function handleSubmit(e) {
-    e.preventDefault()
-  }
+import { useForm } from "react-hook-form"
+import { putOrder } from "../actions/fetchData"
 
-  const { items } = useContext(CartContext)
+function Checkout({ onBack, onClose }) {
+  const { items, clearCart } = useContext(CartContext)
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   )
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0)
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm({
+    mode: "onBlur",
+  })
+
+  async function onSubmitForm(data) {
+    console.log("submitted")
+    console.log(JSON.stringify(data))
+    const response = await putOrder({ customer: data, items: items })
+    reset()
+    clearCart()
+    onClose()
+  }
+
   return createPortal(
     <>
       <div className='fixed top-0 left-0 bottom-0 right-0 bg-slate-600/50 dark:bg-slate-900/50 z-10 grid place-content-center'>
@@ -27,8 +45,8 @@ function Checkout({ onBack }) {
           <p className='text-center'>Order price: ${totalPrice.toFixed(2)}</p>
           <p className='text-center'>Items: {totalItems}</p>
           <form
-            onSubmit={handleSubmit}
-            className='flex flex-col gap-2 w-[400px] p-8'
+            onSubmit={handleSubmit(onSubmitForm)}
+            className='flex flex-col gap-2 w-[400px] p-8 '
           >
             <label htmlFor='name' className='font-bold'>
               Name
@@ -36,50 +54,114 @@ function Checkout({ onBack }) {
             <input
               type='text'
               name='name'
-              className='border-[2px] p-2 md:p-1 rounded-xl focus:border-blue-600 focus:border-[2px]'
+              placeholder='Your name...'
+              {...register("name", {
+                required: "This field is required!",
+                minLength: {
+                  value: 3,
+                  message: "Min length is 3 characters!",
+                },
+                maxLength: {
+                  value: 64,
+                  message: "Max value is 64 characters!",
+                },
+              })}
+              className='border-[2px] p-2 md:p-1 rounded-xl focus:border-blue-600 focus:border-[2px] dark:text-black'
             />
+            <p className='text-red-500 text-[12px]'>
+              {errors?.name && <p>{errors?.name?.message || "Error!"}</p>}
+            </p>
             <label htmlFor='phone' className='font-bold'>
               Phone
             </label>
             <input
               type='text'
               name='phone'
-              className='border-[2px] p-2 md:p-1 rounded-xl focus:border-blue-600 focus:border-[2px]'
+              placeholder='Your phone in format +380...'
+              {...register("phone", {
+                required: "This field is required!",
+                minLength: {
+                  value: 13,
+                  message: "Min length is 13 characters!",
+                },
+                maxLength: {
+                  value: 13,
+                  message: "Max value is 13 characters!",
+                },
+              })}
+              className='border-[2px] p-2 md:p-1 rounded-xl focus:border-blue-600 focus:border-[2px] dark:text-black'
             />
+            <p className='text-red-500 text-[12px]'>
+              {errors?.phone && <p>{errors?.phone?.message || "Error!"}</p>}
+            </p>
             <label htmlFor='email' className='font-bold'>
               Email
             </label>
             <input
               type='text'
               name='email'
-              className='border-[2px] p-2 md:p-1 rounded-xl focus:border-blue-600 focus:border-[2px]'
+              placeholder='Your email...'
+              {...register("email", {
+                pattern: {
+                  value:
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  message: "Please enter a valid email",
+                },
+              })}
+              className='border-[2px] p-2 md:p-1 rounded-xl focus:border-blue-600 focus:border-[2px] dark:text-black'
             />
+            <p className='text-red-500 text-[12px]'>
+              {errors?.email && <p>{errors?.email?.message || "Error!"}</p>}
+            </p>
             <label htmlFor='address' className='font-bold'>
               Adress
             </label>
             <input
               type='text'
               name='adress'
-              className='border-[2px] p-2 md:p-1 rounded-xl focus:border-blue-600 focus:border-[2px]'
+              placeholder='Your shipping adress...'
+              {...register("adress", {
+                required: "This field is required!",
+                minLength: {
+                  value: 16,
+                  message: "Min length is 16 characters!",
+                },
+                maxLength: {
+                  value: 128,
+                  message: "Max value is 128 characters!",
+                },
+              })}
+              className='border-[2px] p-2 md:p-1 rounded-xl focus:border-blue-600 focus:border-[2px] dark:text-black'
             />
+            <p className='text-red-500 text-[12px]'>
+              {errors?.adress && <p>{errors?.adress?.message || "Error!"}</p>}
+            </p>
             <label htmlFor='call' className='font-bold'>
               Don't call me to confirm
-              <input type='checkbox' name='call' className='ml-4 w-4 h-4' />
+              <input
+                type='checkbox'
+                name='call'
+                {...register("call", { required: false })}
+                className='ml-4 w-4 h-4'
+              />
             </label>
+
+            <div className='flex items-center justify-center gap-4'>
+              <button
+                type='submit'
+                className='px-4 py-2 rounded-xl uppercase bg-green-600 text-white'
+              >
+                Submit
+              </button>
+
+              <button
+                onClick={onClose}
+                className='px-4 py-2 rounded-xl uppercase bg-red-500 text-white'
+              >
+                Cancel
+              </button>
+            </div>
           </form>
-
-          <div className='flex items-center justify-center mt-8 gap-4'>
-            <button className='px-4 py-2 rounded-xl uppercase bg-green-600 text-white'>
-              Confirm
-            </button>
-
-            <button
-              onClick={onBack}
-              className='px-4 py-2 rounded-xl uppercase bg-red-500 text-white'
-            >
-              Cancel
-            </button>
-          </div>
         </div>
       </div>
       )

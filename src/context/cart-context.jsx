@@ -6,6 +6,7 @@ export const CartContext = createContext({
   items: [],
   addItemToCart: () => {},
   updateItemQuantity: () => {},
+  clearCart: () => {},
 })
 
 export default function CartContextProvider({ children }) {
@@ -75,10 +76,16 @@ export default function CartContextProvider({ children }) {
       }
     })
   }
+
+  function handleClearCart() {
+    setCart({ items: [] })
+  }
+
   const ctxValue = {
     items: cart.items,
     addItemToCart: handleAddItemToCart,
     updateItemQuantity: handleUpdateCartItemQuantity,
+    clearCart: handleClearCart,
   }
 
   return (
