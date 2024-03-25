@@ -54,6 +54,7 @@ function Checkout({ onBack, onClose }) {
             <input
               type='text'
               name='name'
+              placeholder='Your name...'
               {...register("name", {
                 required: "This field is required!",
                 minLength: {
@@ -76,15 +77,16 @@ function Checkout({ onBack, onClose }) {
             <input
               type='text'
               name='phone'
+              placeholder='Your phone in format +380...'
               {...register("phone", {
                 required: "This field is required!",
                 minLength: {
-                  value: 3,
-                  message: "Min length is 3 characters!",
+                  value: 13,
+                  message: "Min length is 13 characters!",
                 },
                 maxLength: {
-                  value: 64,
-                  message: "Max value is 64 characters!",
+                  value: 13,
+                  message: "Max value is 13 characters!",
                 },
               })}
               className='border-[2px] p-2 md:p-1 rounded-xl focus:border-blue-600 focus:border-[2px] dark:text-black'
@@ -98,6 +100,7 @@ function Checkout({ onBack, onClose }) {
             <input
               type='text'
               name='email'
+              placeholder='Your email...'
               {...register("email", {
                 pattern: {
                   value:
@@ -116,6 +119,7 @@ function Checkout({ onBack, onClose }) {
             <input
               type='text'
               name='adress'
+              placeholder='Your shipping adress...'
               {...register("adress", {
                 required: "This field is required!",
                 minLength: {
