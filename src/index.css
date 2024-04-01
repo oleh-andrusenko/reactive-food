@@ -7,7 +7,7 @@
   scrollbar-width: none; /* Firefox */
 }
 
-input:focus{
+input:focus {
   inset: 0;
   outline: none;
 }
